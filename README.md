@@ -1,2 +1,2 @@
-# kirito
-command line tools
+# Kirito
+Command Line Tools
