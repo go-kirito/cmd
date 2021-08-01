@@ -53,10 +53,10 @@ func KiritoMod() string {
 	if cachePath == "" {
 		cachePath = filepath.Join(gopath, "pkg", "mod")
 	}
-	if path, err := ModuleVersion("github.com/go-kirito/cmd"); err == nil {
+	if path, err := ModuleVersion("github.com/go-kirito/cmd/kirito"); err == nil {
 		// $GOPATH/pkg/mod/github.com/go-kratos/cmd
 		return filepath.Join(cachePath, path)
 	}
 	// $GOPATH/src/github.com/go-kirito/cmd
-	return filepath.Join(gopath, "src", "github.com", "go-kirito", "cmd")
+	return filepath.Join(gopath, "src", "github.com", "go-kirito", "cmd", "kirito")
 }
