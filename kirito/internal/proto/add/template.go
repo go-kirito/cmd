@@ -10,17 +10,38 @@ const protoTemplate = `
 syntax = "proto3";
 
 package {{.Package}};
+import "google/api/annotations.proto";
 
 option go_package = "{{.GoPackage}}";
 option java_multiple_files = true;
 option java_package = "{{.JavaPackage}}";
 
 service {{.Service}} {
-    rpc Create{{.Service}} (Create{{.Service}}Request) returns (Create{{.Service}}Reply);
-    rpc Update{{.Service}} (Update{{.Service}}Request) returns (Update{{.Service}}Reply);
-    rpc Delete{{.Service}} (Delete{{.Service}}Request) returns (Delete{{.Service}}Reply);
-    rpc Get{{.Service}} (Get{{.Service}}Request) returns (Get{{.Service}}Reply);
-    rpc List{{.Service}} (List{{.Service}}Request) returns (List{{.Service}}Reply);
+    rpc Create{{.Service}} (Create{{.Service}}Request) returns (Create{{.Service}}Reply){
+		option(google.api.http) = {
+			post:"helloworld",
+		};
+	}
+    rpc Update{{.Service}} (Update{{.Service}}Request) returns (Update{{.Service}}Reply){
+		option(google.api.http) = {
+			put:"helloworld/{name}",
+		};
+	}
+    rpc Delete{{.Service}} (Delete{{.Service}}Request) returns (Delete{{.Service}}Reply){
+		option(google.api.http) = {
+			delete:"helloworld/{name}",
+		};
+	}
+    rpc Get{{.Service}} (Get{{.Service}}Request) returns (Get{{.Service}}Reply){
+		option(google.api.http) = {
+			get:"helloworld/{name}",
+		};
+	}
+    rpc List{{.Service}} (List{{.Service}}Request) returns (List{{.Service}}Reply){
+		option(google.api.http) = {
+			get:"helloworld",
+		};
+	}
 }
 
 message Create{{.Service}}Request {}

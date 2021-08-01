@@ -52,7 +52,7 @@ func (p *Project) New(ctx context.Context, dir string, layout string, branch str
 	fmt.Println(color.WhiteString("$ go generate ./..."))
 	fmt.Println(color.WhiteString("$ go build -o ./bin/ ./... "))
 	fmt.Println(color.WhiteString("$ ./bin/%s -conf ./configs\n", p.Name))
-	fmt.Println("			🤝 Thanks for using Kratos")
-	fmt.Println("	📚 Tutorial: https://go-kratos.dev/docs/getting-started/start")
+	fmt.Println("			🤝 Thanks for using Kirito")
+	//fmt.Println("	📚 Tutorial: https://go-kratos.dev/docs/getting-started/start")
 	return nil
 }
