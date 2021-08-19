@@ -14,7 +14,7 @@ import (
 var CmdNew = &cobra.Command{
 	Use:   "new",
 	Short: "Create a service template",
-	Long:  "Create a service project using the repository template. Example: kratos new helloworld",
+	Long:  "Create a service project using the repository template. Example: kirito new helloworld",
 	Run:   run,
 }
 
@@ -22,7 +22,7 @@ var repoURL string
 var branch string
 
 func init() {
-	if repoURL = os.Getenv("KRATOS_LAYOUT_REPO"); repoURL == "" {
+	if repoURL = os.Getenv("KIRITO_LAYOUT_REPO"); repoURL == "" {
 		repoURL = "https://github.com/go-kirito/kirito-layout.git"
 	}
 	CmdNew.Flags().StringVarP(&repoURL, "repo-url", "r", repoURL, "layout repo")
