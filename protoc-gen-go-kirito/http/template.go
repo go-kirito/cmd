@@ -23,27 +23,32 @@ func Register{{.ServiceType}}HTTPServer(s *http.Server, srv {{.ServiceType}}HTTP
 
 {{range .Methods}}
 func _{{$svrType}}_{{.Name}}{{.Num}}_HTTP_Handler(srv {{$svrType}}HTTPServer) func(ctx http.Context) {
-	return func(ctx http.Context) {
+	return func(ctx http.Context) error {
 		var in {{.Request}}
 		{{- if .HasBody}}
 		if err := ctx.Bind(&in{{.Body}}); err != nil {
-			return ctx.Fail(err)
+			return err
 		}
 		{{- else}}
 		if err := ctx.BindQuery(&in{{.Body}}); err != nil {
-			return ctx.Fail(err)
+			return err
 		}
 		{{- end}}
 		{{- if .HasVars}}
 		if err := ctx.BindVars(&in); err != nil {
-			return ctx.Fail(err)
+			return err
 		}
 		{{- end}}
-		out, err := srv.{{.Name}}(ctx, &in)
+		http.SetOperation(ctx,"/{{$svrName}}/{{.Name}}")
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.{{.Name}}(ctx, req.(*{{.Request}}))
+		})
+		out, err := h(ctx, &in)
 		if err != nil {
-			return ctx.Fail(err)
+			return err
 		}
-		return ctx.Success(out)
+		reply := out.(*{{.Reply}})
+		return ctx.Result(200, reply{{.ResponseBody}})
 	}
 }
 {{end}}
@@ -65,9 +70,15 @@ func New{{.ServiceType}}HTTPClient (client *http.Client) {{.ServiceType}}HTTPCli
 {{range .MethodSets}}
 func (c *{{$svrType}}HTTPClientImpl) {{.Name}}(ctx context.Context, in *{{.Request}}, opts ...http.CallOption) (*{{.Reply}}, error) {
 	var out {{.Reply}}
-	path := "{{.Path}}"
+	pattern := "{{.Path}}"
+	path := binding.EncodeURL(pattern, in, {{not .HasBody}})
+	opts = append(opts, http.Operation("/{{$svrName}}/{{.Name}}"))
+	opts = append(opts, http.PathTemplate(pattern))
+	{{if .HasBody -}}
 	err := c.cc.Invoke(ctx, "{{.Method}}", path, in{{.Body}}, &out{{.ResponseBody}}, opts...)
-
+	{{else -}} 
+	err := c.cc.Invoke(ctx, "{{.Method}}", path, nil, &out{{.ResponseBody}}, opts...)
+	{{end -}}
 	if err != nil {
 		return nil, err
 	}

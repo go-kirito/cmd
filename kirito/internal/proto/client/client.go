@@ -34,7 +34,7 @@ func run(cmd *cobra.Command, args []string) {
 		err   error
 		proto = strings.TrimSpace(args[0])
 	)
-	if err = look("protoc-gen-go", "protoc-gen-go-kirito", "protoc-gen-validate"); err != nil {
+	if err = look("protoc-gen-xgo", "protoc-gen-go-kirito", "protoc-gen-validate"); err != nil {
 		// update the kratos plugins
 		cmd := exec.Command("kirito", "upgrade")
 		cmd.Stdout = os.Stdout
@@ -82,7 +82,7 @@ func generate(proto string, args []string) error {
 		"--proto_path=./third_party",
 		"--proto_path=" + base.KiritoMod(),
 		"--proto_path=" + filepath.Join(base.KiritoMod(), "third_party"),
-		"--go_out=paths=source_relative:.",
+		"--xgo_out=paths=source_relative:.",
 		"--go-kirito_out=paths=source_relative:.",
 	}
 	protoBytes, err := ioutil.ReadFile(proto)
@@ -105,5 +105,6 @@ func generate(proto string, args []string) error {
 		return err
 	}
 	fmt.Printf("proto: %s\n", proto)
+
 	return nil
 }

@@ -36,7 +36,7 @@ else
 	cp ./kirito/kirito $${REPLY}/;cp ./protoc-gen-go-kirito/protoc-gen-go-kirito $${REPLY}/;else mkdir -p $(BIN);\
 	cp ./kirito/kirito $(BIN);cp ./protoc-gen-go-kirito/protoc-gen-go-kirito $(BIN); fi)
 endif
-	@which protoc-gen-go &> /dev/null || go get google.golang.org/protobuf/cmd/protoc-gen-go
+	@which protoc-gen-xgo &> /dev/null || go get github.com/go-kirito/protobuf-go/cmd/protoc-gen-xgo
 	@which protoc-gen-validate  &> /dev/null || go get github.com/envoyproxy/protoc-gen-validate
 	@echo "install finished"
 
