@@ -205,7 +205,7 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 		g.P(deprecationComment)
 	}
 	serviceDescVar := service.GoName + "_ServiceDesc"
-	g.P("func Register", service.GoName, "Server(s ", grpcPackage.Ident("ServiceRegistrar"), ", srv ", serverType, ") {")
+	g.P("func Register", service.GoName, "GrpcServer(s ", grpcPackage.Ident("ServiceRegistrar"), ", srv ", serverType, ") {")
 	g.P("s.RegisterService(&", serviceDescVar, `, srv)`)
 	g.P("}")
 	g.P()

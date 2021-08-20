@@ -82,7 +82,7 @@ func generate(proto string, args []string) error {
 		"--proto_path=./third_party",
 		"--proto_path=" + base.KiritoMod(),
 		"--proto_path=" + filepath.Join(base.KiritoMod(), "third_party"),
-		"--xgo_out=paths=source_relative:.",
+		"--go_out=paths=source_relative:.",
 		"--go-kirito_out=paths=source_relative:.",
 	}
 	protoBytes, err := ioutil.ReadFile(proto)

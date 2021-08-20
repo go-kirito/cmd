@@ -26,7 +26,7 @@ func main() {
 	}
 
 	var flags flag.FlagSet
-	grpc.RequireUnimplemented = flags.Bool("require_unimplemented_servers", true, "set to false to match legacy behavior")
+	grpc.RequireUnimplemented = flags.Bool("require_unimplemented_servers", false, "set to false to match legacy behavior")
 
 	protogen.Options{
 		ParamFunc: flags.Set,
