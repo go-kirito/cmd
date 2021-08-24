@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/go-kirito/cmd/kirito/internal/ioc"
 	"log"
 
 	"github.com/go-kirito/cmd/kirito/internal/change"
@@ -28,11 +29,14 @@ func init() {
 	rootCmd.AddCommand(proto.CmdProto)
 	rootCmd.AddCommand(upgrade.CmdUpgrade)
 	rootCmd.AddCommand(change.CmdChange)
+	rootCmd.AddCommand(ioc.CmdIoc)
 	rootCmd.AddCommand(run.CmdRun)
 }
 
 func main() {
+
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}
+	//ioc.File("/Users/apple/Desktop/WWW/study/go/gojichu/src")
 }

@@ -30,6 +30,8 @@ func init() {
 }
 
 func run(cmd *cobra.Command, args []string) {
+	fmt.Println("okokok")
+
 	wd, err := os.Getwd()
 	if err != nil {
 		panic(err)

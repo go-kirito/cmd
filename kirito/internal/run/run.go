@@ -27,6 +27,7 @@ func Run(cmd *cobra.Command, args []string) {
 	if len(args) > 0 {
 		dir = args[0]
 	}
+	fmt.Println(dir, "cssacsad")
 	base, err := os.Getwd()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "\033[31mERROR: %s\033[m\n", err)
