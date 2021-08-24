@@ -38,5 +38,4 @@ func main() {
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
 	}
-	//ioc.File("/Users/apple/Desktop/WWW/study/go/gojichu/src")
 }

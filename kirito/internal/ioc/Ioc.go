@@ -18,9 +18,8 @@ import (
 路径配置
 */
 var (
-	EnvDir    string = "/di"
-	WirePath  string = "/di/wire.go"
-	EventPack string = "server"
+	EnvDir   string = "/di"
+	WirePath string = "/di/wire.go"
 )
 
 //IOC cmd
@@ -49,20 +48,13 @@ func Run(cmd *cobra.Command, args []string) {
 
 func File(GetPath string, TUrl string) {
 	//转换绝对路径
-
 	GetPath = AsbPath(GetPath)
 	TUrl = AsbPath(TUrl)
 	//校验go.mod 及初始化配置文件是否存在 不存在则创建
 	CheckMod(GetPath, TUrl)
-	//获取mod模块名
-	//注解业务处理
 
 	//递归存放符合条件文件路径
 	list := ListFiles(GetPath)
-	//Imports:=make([]string,0)
-	//wire:=""
-	//wires:=make([]string,0)
-	//imp_list:=make([]string,0)
 
 	pack_func := make([]*model.PackFunc, 0)
 
@@ -72,8 +64,6 @@ func File(GetPath string, TUrl string) {
 		if build != nil {
 			//获取import
 			if imp := GetImport(GetPath, file); imp != "" {
-				//imp_list=append(imp_list,imp)
-				//fmt.Println(imp)
 				for _, v := range build {
 					v.Url = imp
 					if imp != "" {
@@ -81,32 +71,16 @@ func File(GetPath string, TUrl string) {
 					}
 				}
 			}
-			//wires=append(wires,build)
 		}
 
 	}
 	PackFuncDate := FuncImpDate(pack_func)
-
-	//imports_info := ""
-	//imp_list = RemoveRepeatedElement(imp_list)
-	////组装imp_list
-	//for _,v:=range imp_list  {
-	//	imports_info+=fmt.Sprintf("%s\n    ",v)
-	//}
 
 	imports := fmt.Sprintf(`import (
 	"github.com/google/wire"
 	"github.com/go-kirito/pkg/application"
 	 %s
 )`, PackFuncDate.ImportDate)
-	//for _,v:=range wires{
-	//	if wire !=""{
-	//		wire+=","+v
-	//	}else{
-	//		wire+=v
-	//	}
-	//}
-	//wire = fmt.Sprintf("wire.Build(%s)\n",wire)
 
 	pack := fmt.Sprintf(`//+build wireinject
 
@@ -121,80 +95,12 @@ func RegisterService(app application.Application) error {
 }
 `, imports, PackFuncDate.FuncDate)
 
-	//pack:=GetPackName(GetPath,1) //包名处理
-	//data:=fmt.Sprintf("//+build wireinject\n\npackage test\n\nimport (\n\t\"bingu/test/%s\"\n\t\"github.com/google/wire\"\n)\n\nfunc InitializeEvent() %s.Event {\n\t%s\n\treturn %s.Event{}\n}\n",pack,pack,wire,pack)
 	err := WriteToFile(TUrl+WirePath, pack)
 	if err != nil {
 		log.Fatal("生成wire失败")
 	}
-	//SetWires(TUrl+EnvDir)
 
 }
-
-//func File(GetPath string)  {
-//	//转换绝对路径
-//	GetPath = AsbPath(GetPath)
-//	//校验go.mod 及初始化配置文件是否存在 不存在则创建
-//	CheckMod(GetPath)
-//	//获取mod模块名
-//	//注解业务处理
-//
-//	//递归存放符合条件文件路径
-//	list:=ListFiles(GetPath)
-//	//Imports:=make([]string,0)
-//	wire:=""
-//	wires:=make([]string,0)
-//	imp_list:=make([]string,0)
-//	for _,file:=range list{
-//		build:=FileAnnotation(file) //返回wire.Build
-//		//存放当前路径
-//		if build!=nil {
-//			//获取import
-//			if imp:=GetImport(GetPath,file);imp!=""{
-//				imp_list=append(imp_list,imp)
-//			}
-//			//wires=append(wires,build)
-//		}
-//
-//	}
-//	imports_info := ""
-//	imp_list = RemoveRepeatedElement(imp_list)
-//	//组装imp_list
-//	for _,v:=range imp_list  {
-//		imports_info+=fmt.Sprintf("%s\n    ",v)
-//	}
-//
-//	imports:=fmt.Sprintf(`import (
-//	"github.com/google/wire"
-//	%s
-//)`,imports_info)
-//	for _,v:=range wires{
-//		if wire !=""{
-//			wire+=","+v
-//		}else{
-//			wire+=v
-//		}
-//	}
-//	//wire = fmt.Sprintf("wire.Build(%s)\n",wire)
-//
-//	pack:=fmt.Sprintf(`//+build wireinject
-//
-//package wires
-//
-//%s
-//
-//func InitializeEvent() %s.Event {
-//	wire.Build(%s)
-//
-//	return %s.Event{}
-//}
-//`,imports,EventPack,wire,EventPack)
-//
-//
-//	//pack:=GetPackName(GetPath,1) //包名处理
-//	//data:=fmt.Sprintf("//+build wireinject\n\npackage test\n\nimport (\n\t\"bingu/test/%s\"\n\t\"github.com/google/wire\"\n)\n\nfunc InitializeEvent() %s.Event {\n\t%s\n\treturn %s.Event{}\n}\n",pack,pack,wire,pack)
-//	WriteToFile(GetPath+WirePath,pack)
-//}
 
 //递归调用全文件并保存该地址
 var FilePath = make([]string, 0)
