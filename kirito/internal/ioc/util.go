@@ -35,22 +35,12 @@ func CheckMod(GetPath string, TUrl string) {
 	}
 	//判断目录是否存在
 	if !IsDir(TUrl + EnvDir) {
-		//fmt.Println(GetPath+EnvDir)
 		err := os.Mkdir(TUrl+EnvDir, 0777)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("创建%s文件夹失败", EnvDir))
 		}
 	}
-	////判断初始化文件是否存在
-	//if !FileExist(GetPath+EventPath){
-	//	//创建Event配置文件
-	//	file,err:=os.Create(GetPath+EventPath)
-	//	if err!=nil {
-	//		log.Fatal(fmt.Sprintf("创建%s文件失败",EventPath))
-	//	}
-	//	file.Write([]byte(tplevent))
-	//	defer file.Close()
-	//}
+
 	//判断初始化文件是否存在
 	if !FileExist(TUrl + WirePath) {
 		//创建Event配置文件
@@ -83,16 +73,13 @@ func FileDir(GetPath string) []fs.FileInfo {
 */
 
 func GetModName(GetPath string) string {
-	//fmt.Println(GetPath)
 	command := "cd " + GetPath + "; " + "go list -m"
 	cmd := exec.Command("/bin/sh", "-c", command)
-	//cmd := exec.Command( "go","list","-m")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Printf("combined out:\n%s\n", string(out))
 		log.Fatalf("cmd.Run() failed with %s\n", err)
 	}
-	//fmt.Printf("combined out:\n%s\n", string(out))
 	return strings.Replace(string(out), "\n", "", -1)
 }
 
@@ -103,9 +90,6 @@ func SetWires(path string) {
 	if cmdErr != nil {
 		log.Fatal(cmdErr, "编译wire失败")
 	}
-	//command
-	//cmd:=exec.Command("cd"+path,"wire .")
-	//cmd.Run()
 
 }
 
@@ -158,7 +142,6 @@ func GetImport(RootPath, GetPath string) string {
 
 		re3 := regexp.MustCompile("^[^/]*/")
 		strHaiCoder1 := re3.ReplaceAllString(strHaiCoder[0], "")
-		//fmt.Println(GetModName(GetPath),GetPath)
 
 		return fmt.Sprintf(`"%s"`, GetModName(GetPath)+"/"+strHaiCoder1)
 	}
@@ -180,22 +163,6 @@ func GetPackName(GetPath string, num int) string {
 */
 
 func AsbPath(GetPath string) string {
-
-	//_,file:=filepath.Split(GetPath)
-	//if file=="" {
-	//	GetPath = GetPackName(GetPath,2)
-	//	fmt.Println(GetPath)
-	//}
-	//path:=""
-	//if !filepath.IsAbs(GetPath) {
-	//相对路径转绝对路径
-	//_,err:= filepath.Abs(GetPath)
-	//if err!=nil {
-	//	log.Fatal(err)
-	//}
-	//return strings.Replace(GetPath,"\\","/",-1)
-	//return filepath.Split(GetPath)
-	//}
 	gpath, err := filepath.Abs(GetPath)
 	if err != nil {
 		log.Fatal(err)

@@ -140,14 +140,10 @@ func FileAnnotation(filePath string) (data []*model.PackFunc) {
 		log.Println(err)
 		return nil
 	}
-	//name:=""
+
 	for _, decl := range ast_file.Decls {
 		if fn, ok := decl.(*ast.FuncDecl); ok {
 			if ShouldGen(fn.Doc.Text()) {
-				//if name!="" {
-				//	name+=", "
-				//}
-				//name+=ast_file.Name.Name+"."+fn.Name.Name
 				data = append(data, &model.PackFunc{PackName: ast_file.Name.Name, FuncName: fn.Name.Name})
 			}
 		}
