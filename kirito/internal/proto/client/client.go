@@ -34,7 +34,7 @@ func run(cmd *cobra.Command, args []string) {
 		err   error
 		proto = strings.TrimSpace(args[0])
 	)
-	if err = look("protoc-gen-xgo", "protoc-gen-go-kirito", "protoc-gen-validate"); err != nil {
+	if err = look("protoc-gen-go", "protoc-gen-go-kirito", "protoc-gen-validate"); err != nil {
 		// update the kratos plugins
 		cmd := exec.Command("kirito", "upgrade")
 		cmd.Stdout = os.Stdout

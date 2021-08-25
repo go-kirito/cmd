@@ -71,17 +71,16 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 	}
 	g.P("}")
 	g.P()
-	g.P("// @wire")
-	g.P("func Register", service.GoName, "Server(app ", application.Ident("Application"), ", srv ", serverType, ") error {")
+	g.P("// @di di文件根据注解自动生成")
+	g.P("func Register", service.GoName, "Server(app ", application.Ident("Application"), ", srv ", serverType, ") {")
 
 	g.P("if app.HttpServer() != nil {")
-	g.P("RegisterGreeterHTTPServer(app.HttpServer(), srv)")
+	g.P("Register", service.GoName, "HTTPServer(app.HttpServer(), srv)")
 	g.P("}")
 
 	g.P("if app.GrpcServer() != nil {")
-	g.P("RegisterGreeterGrpcServer(app.GrpcServer(), srv)")
+	g.P("Register", service.GoName, "GrpcServer(app.GrpcServer(), srv)")
 	g.P("}")
-	g.P("return nil")
 	g.P("}")
 }
 
