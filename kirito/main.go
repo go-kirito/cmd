@@ -8,6 +8,7 @@ import (
 	"github.com/go-kirito/cmd/kirito/internal/proto"
 	"github.com/go-kirito/cmd/kirito/internal/run"
 	"github.com/go-kirito/cmd/kirito/internal/upgrade"
+	"github.com/go-kirito/cmd/kirito/internal/wire"
 
 	"github.com/spf13/cobra"
 )
@@ -29,6 +30,7 @@ func init() {
 	rootCmd.AddCommand(upgrade.CmdUpgrade)
 	rootCmd.AddCommand(change.CmdChange)
 	rootCmd.AddCommand(run.CmdRun)
+	rootCmd.AddCommand(wire.CmdWire)
 }
 
 func main() {
