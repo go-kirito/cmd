@@ -50,7 +50,7 @@ func (p *Project) New(ctx context.Context, dir string, layout string, branch str
 	fmt.Print("💻 Use the following command to start the project 👇:\n\n")
 
 	fmt.Println(color.WhiteString("$ cd %s", p.Name))
-	fmt.Println(color.WhiteString("$ make helloworld"))
+	fmt.Println(color.WhiteString("$ make demo"))
 	fmt.Println("			🤝 Thanks for using Kirito")
 	//fmt.Println("	📚 Tutorial: https://go-kratos.dev/docs/getting-started/start")
 	return nil
