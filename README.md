@@ -14,7 +14,7 @@ Kirito 来自于 [Kratos](https://github.com/go-kratos/kratos/) 魔改版，新�
 
 # 安装
 
-```shell
+```bash
 go get -u github.com/go-kirito/cmd/kirito
 ```
 
@@ -22,7 +22,7 @@ go get -u github.com/go-kirito/cmd/kirito
 
 # 项目创建
 
-```shel
+```bash
 # create project's layout
 kirito new helloworld
 
@@ -42,3 +42,9 @@ kirito proto server api/helloworld/helloworld.proto -t internal/app/helloworld/u
 make run
 ```
 
+
+# Kirito升级
+
+```bash
+kirito upgrade
+```
