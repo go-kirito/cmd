@@ -54,13 +54,14 @@ func run(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	fmt.Println("mod:", mod)
-
 	//遍历目录
-	dir := strings.TrimSpace(args[0])
+	dir := args[0]
 	if dir == "" {
 		dir = "."
+	} else {
+		dir = strings.TrimSpace(dir)
 	}
+
 	err = walk(dir)
 
 	if err != nil {
@@ -68,20 +69,8 @@ func run(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	//生成di文件
-	diContent, err := execute(diTemplate, m)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	if err = ioutil.WriteFile(defaultPath+"/"+defaultDIFileName, diContent, 0644); err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
 	//生成wire文件
-	wireContent, err := execute(wireTemplate, w)
+	wireContent, err := execute()
 	if err != nil {
 		fmt.Println(err)
 		return

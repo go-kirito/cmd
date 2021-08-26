@@ -21,7 +21,8 @@ import (
 type {{ .Service }}Service struct {
 }
 
-func New{{ .Service }}Service() *{{ .Service }}Service {
+// @wire
+func New{{ .Service }}Service() pb.I{{ .Service }}UseCase {
 	return &{{ .Service }}Service{}
 }
 

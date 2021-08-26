@@ -48,19 +48,43 @@ var wireTemplate = `
 
 package di
 
+
+
 import (
-	{{ range .Services }}
+	{{ range .Wire.Services }}
 	{{.PackageName}} "{{.Path}}"
 	{{- end }}
 
+	{{ range .DI.Services }}
+	{{.PackageName}} "{{.Path}}"
+	{{- end }}
+
+	"github.com/go-kirito/pkg/application"
 	"github.com/google/wire"
 
 )
 
+type UseCases struct {
+	{{ range .DI.Services}}
+	{{ .VariableName }} {{.PackageName}}.{{.ParamType}}
+	{{- end }}
+}
+
+func RegisterService(app application.Application) error {
+	uc, err := MakeUseCase()
+	if err != nil {
+		return err
+	}
+	{{ range .DI.Services }}
+	{{.PackageName}}.{{.Func}}(app, uc.{{.VariableName}})
+	{{- end }}
+	return nil
+}
+
 func MakeUseCase() (*UseCases, error) {
 	panic(wire.Build(
 		wire.Struct(new(UseCases), "*"),
-		{{ range .Services }}
+		{{ range .Wire.Services }}
 		{{.PackageName}}.{{.Func}},
 		{{- end }}
 	))
@@ -82,25 +106,47 @@ type serviceDesc struct {
 	Services []*service
 }
 
-func execute(tpl string, m map[string][]*service) ([]byte, error) {
-	sd := new(serviceDesc)
-	sd.Services = make([]*service, 0)
+func execute() ([]byte, error) {
+	msd := new(serviceDesc)
+	msd.Services = make([]*service, 0)
 	for packageName, v := range m {
 		for k, s := range v {
 			//重新定义包名
 			rePackageName := fmt.Sprintf("%s%d", packageName, k)
 			s.PackageName = rePackageName
 			s.Path = fmt.Sprintf("%s/%s", mod, s.Path)
-			sd.Services = append(sd.Services, s)
+			msd.Services = append(msd.Services, s)
 		}
 	}
 
+	wsd := new(serviceDesc)
+	wsd.Services = make([]*service, 0)
+	for packageName, v := range w {
+		for k, s := range v {
+			//重新定义包名
+			rePackageName := fmt.Sprintf("%s%d", packageName, k)
+			s.PackageName = rePackageName
+			s.Path = fmt.Sprintf("%s/%s", mod, s.Path)
+			wsd.Services = append(wsd.Services, s)
+		}
+	}
+
+	type wireData struct {
+		DI   *serviceDesc
+		Wire *serviceDesc
+	}
+
+	wd := &wireData{
+		DI:   msd,
+		Wire: wsd,
+	}
+
 	buf := new(bytes.Buffer)
-	tmpl, err := template.New("service").Parse(tpl)
+	tmpl, err := template.New("service").Parse(wireTemplate)
 	if err != nil {
 		return nil, err
 	}
-	if err := tmpl.Execute(buf, sd); err != nil {
+	if err := tmpl.Execute(buf, wd); err != nil {
 		return nil, err
 	}
 	return buf.Bytes(), nil

@@ -40,18 +40,17 @@ func (p *Project) New(ctx context.Context, dir string, layout string, branch str
 		return err
 	}
 	os.Rename(
-		path.Join(to, "cmd", "server"),
-		path.Join(to, "cmd", p.Name),
+		path.Join(to, "internal", "app", "demo"),
+		path.Join(to, "internal", "app", p.Name),
 	)
+
 	base.Tree(to, dir)
 
 	fmt.Printf("\n🍺 Project creation succeeded %s\n", color.GreenString(p.Name))
 	fmt.Print("💻 Use the following command to start the project 👇:\n\n")
 
 	fmt.Println(color.WhiteString("$ cd %s", p.Name))
-	fmt.Println(color.WhiteString("$ go generate ./..."))
-	fmt.Println(color.WhiteString("$ go build -o ./bin/ ./... "))
-	fmt.Println(color.WhiteString("$ ./bin/%s -conf ./configs\n", p.Name))
+	fmt.Println(color.WhiteString("$ make helloworld"))
 	fmt.Println("			🤝 Thanks for using Kirito")
 	//fmt.Println("	📚 Tutorial: https://go-kratos.dev/docs/getting-started/start")
 	return nil
