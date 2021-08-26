@@ -35,7 +35,7 @@ kirito proto add api/helloworld/helloworld.proto
 kirito proto client api/helloworld/helloworld.proto
 # generate wire
 kirito wire .
-# generate server template
+# generate usecase template
 kirito proto server api/helloworld/helloworld.proto -t internal/app/helloworld/usecase
 
 # run

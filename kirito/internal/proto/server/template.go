@@ -7,7 +7,7 @@ import (
 
 var serviceTemplate = `
 {{- /* delete empty line */ -}}
-package service
+package usecase
 
 import (
     "context"
