@@ -23,7 +23,7 @@ type {{ .Service }}UseCase struct {
 
 // @wire
 func New{{ .Service }}UseCase() pb.I{{ .Service }}UseCase {
-	return &{{ .Service }}Service{}
+	return &{{ .Service }}UseCase{}
 }
 
 {{- $s1 := "google.protobuf.Empty" }}
