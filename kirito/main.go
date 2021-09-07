@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/go-kirito/cmd/kirito/internal/change"
+	"github.com/go-kirito/cmd/kirito/internal/domain"
 	"github.com/go-kirito/cmd/kirito/internal/project"
 	"github.com/go-kirito/cmd/kirito/internal/proto"
 	"github.com/go-kirito/cmd/kirito/internal/run"
@@ -31,6 +32,7 @@ func init() {
 	rootCmd.AddCommand(change.CmdChange)
 	rootCmd.AddCommand(run.CmdRun)
 	rootCmd.AddCommand(wire.CmdWire)
+	rootCmd.AddCommand(domain.CmdDomain)
 }
 
 func main() {
