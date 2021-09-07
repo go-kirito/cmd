@@ -109,14 +109,17 @@ type serviceDesc struct {
 func execute() ([]byte, error) {
 	msd := new(serviceDesc)
 	msd.Services = make([]*service, 0)
+	var i = 0
 	for packageName, v := range m {
 		for k, s := range v {
 			//重新定义包名
 			rePackageName := fmt.Sprintf("%s%d", packageName, k)
 			s.PackageName = rePackageName
+			s.VariableName = fmt.Sprintf("%s%d", s.VariableName, i)
 			s.Path = fmt.Sprintf("%s/%s", mod, s.Path)
 			msd.Services = append(msd.Services, s)
 		}
+		i = i + 1
 	}
 
 	wsd := new(serviceDesc)

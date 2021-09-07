@@ -18,17 +18,17 @@ import (
     {{- end }}
 )
 
-type {{ .Service }}Service struct {
+type {{ .Service }}UseCase struct {
 }
 
 // @wire
-func New{{ .Service }}Service() pb.I{{ .Service }}UseCase {
+func New{{ .Service }}UseCase() pb.I{{ .Service }}UseCase {
 	return &{{ .Service }}Service{}
 }
 
 {{- $s1 := "google.protobuf.Empty" }}
 {{ range .Methods }}
-func (s *{{ .Service }}Service) {{ .Name }}(ctx context.Context, req {{ if eq .Request $s1 }}*emptypb.Empty{{ else }}*pb.{{ .Request }}{{ end }}) ({{ if eq .Reply $s1 }}*emptypb.Empty{{ else }}*pb.{{ .Reply }}{{ end }}, error) {
+func (s *{{ .Service }}UseCase) {{ .Name }}(ctx context.Context, req {{ if eq .Request $s1 }}*emptypb.Empty{{ else }}*pb.{{ .Request }}{{ end }}) ({{ if eq .Reply $s1 }}*emptypb.Empty{{ else }}*pb.{{ .Reply }}{{ end }}, error) {
 	return {{ if eq .Reply $s1 }}&emptypb.Empty{}{{ else }}&pb.{{ .Reply }}{}{{ end }}, nil
 }
 {{- end }}
