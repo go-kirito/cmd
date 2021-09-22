@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"fmt"
 	"html/template"
+	"strings"
 )
 
 var diTemplate = `
@@ -129,7 +130,7 @@ func execute() ([]byte, error) {
 			//重新定义包名
 			rePackageName := fmt.Sprintf("%s%d", packageName, k)
 			s.PackageName = rePackageName
-			s.Path = fmt.Sprintf("%s/%s", mod, s.Path)
+			s.Path = fmt.Sprintf("%s/%s", mod, strings.Replace(s.Path, "\\", "/", -1))
 			wsd.Services = append(wsd.Services, s)
 		}
 	}
