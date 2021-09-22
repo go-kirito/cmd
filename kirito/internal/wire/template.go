@@ -117,7 +117,7 @@ func execute() ([]byte, error) {
 			rePackageName := fmt.Sprintf("%s%d", packageName, k)
 			s.PackageName = rePackageName
 			s.VariableName = fmt.Sprintf("%s%d", s.VariableName, i)
-			s.Path = fmt.Sprintf("%s/%s", mod, s.Path)
+			s.Path = fmt.Sprintf("%s/%s", mod, strings.Replace(s.Path, "\\", "/", -1))
 			msd.Services = append(msd.Services, s)
 		}
 		i = i + 1
