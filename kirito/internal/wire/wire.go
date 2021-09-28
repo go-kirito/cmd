@@ -74,7 +74,6 @@ func run(cmd *cobra.Command, args []string) {
 		if err := os.MkdirAll(defaultPath, 0700); err != nil {
 			log.Fatal(err)
 		}
-		return
 	}
 
 	//生成wire文件
