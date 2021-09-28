@@ -11,6 +11,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io/ioutil"
+	"log"
 	"os"
 	"path"
 	"path/filepath"
@@ -66,6 +67,13 @@ func run(cmd *cobra.Command, args []string) {
 
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+
+	if _, err := os.Stat(defaultPath); os.IsNotExist(err) {
+		if err := os.MkdirAll(defaultPath, 0700); err != nil {
+			log.Fatal(err)
+		}
 		return
 	}
 
