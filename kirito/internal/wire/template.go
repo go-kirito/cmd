@@ -52,12 +52,12 @@ package di
 
 
 import (
-	{{ range .Wire.Services }}
-	{{.PackageName}} "{{.Path}}"
+	{{ range .DIPathList }}
+	{{.Alias}} "{{.Path}}"
 	{{- end }}
 
-	{{ range .DI.Services }}
-	{{.PackageName}} "{{.Path}}"
+	{{ range .WirePathList }}
+	{{.Alias}} "{{.Path}}"
 	{{- end }}
 
 	"github.com/go-kirito/pkg/application"
@@ -107,17 +107,34 @@ type serviceDesc struct {
 	Services []*service
 }
 
+type pathDesc struct {
+	Alias string
+	Path  string
+}
+
 func execute() ([]byte, error) {
 	msd := new(serviceDesc)
 	msd.Services = make([]*service, 0)
 	var i = 0
+
+	diPathList := make(map[string]pathDesc)
+	wirePathList := make(map[string]pathDesc)
+
 	for packageName, v := range m {
 		for k, s := range v {
-			//重新定义包名
-			rePackageName := fmt.Sprintf("%s%d", packageName, k)
-			s.PackageName = rePackageName
-			s.VariableName = fmt.Sprintf("%s%d", s.VariableName, i)
 			s.Path = fmt.Sprintf("%s/%s", mod, strings.Replace(s.Path, "\\", "/", -1))
+			if v, ok := diPathList[s.Path]; !ok {
+				//重新定义包名
+				rePackageName := fmt.Sprintf("%s%d", packageName, k)
+				s.PackageName = rePackageName
+				s.VariableName = fmt.Sprintf("%s%d", s.VariableName, i)
+				diPathList[s.Path] = pathDesc{
+					Alias: s.PackageName,
+					Path:  s.Path,
+				}
+			} else {
+				s.PackageName = v.Alias
+			}
 			msd.Services = append(msd.Services, s)
 		}
 		i = i + 1
@@ -127,22 +144,34 @@ func execute() ([]byte, error) {
 	wsd.Services = make([]*service, 0)
 	for packageName, v := range w {
 		for k, s := range v {
-			//重新定义包名
-			rePackageName := fmt.Sprintf("%s%d", packageName, k)
-			s.PackageName = rePackageName
 			s.Path = fmt.Sprintf("%s/%s", mod, strings.Replace(s.Path, "\\", "/", -1))
+			if v, ok := wirePathList[s.Path]; !ok {
+				//重新定义包名
+				rePackageName := fmt.Sprintf("%s_%d", packageName, k)
+				s.PackageName = rePackageName
+				wirePathList[s.Path] = pathDesc{
+					Alias: s.PackageName,
+					Path:  s.Path,
+				}
+			} else {
+				s.PackageName = v.Alias
+			}
 			wsd.Services = append(wsd.Services, s)
 		}
 	}
 
 	type wireData struct {
-		DI   *serviceDesc
-		Wire *serviceDesc
+		DI           *serviceDesc
+		Wire         *serviceDesc
+		DIPathList   map[string]pathDesc
+		WirePathList map[string]pathDesc
 	}
 
 	wd := &wireData{
-		DI:   msd,
-		Wire: wsd,
+		DI:           msd,
+		Wire:         wsd,
+		DIPathList:   diPathList,
+		WirePathList: wirePathList,
 	}
 
 	buf := new(bytes.Buffer)
