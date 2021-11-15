@@ -40,8 +40,8 @@ func (p *Project) New(ctx context.Context, dir string, layout string, branch str
 		return err
 	}
 	os.Rename(
-		path.Join(to, "internal", "app", "demo"),
-		path.Join(to, "internal", "app", p.Name),
+		path.Join(to, "internal", "helloworld"),
+		path.Join(to, "internal", p.Name),
 	)
 
 	base.Tree(to, dir)

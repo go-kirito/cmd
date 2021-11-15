@@ -17,7 +17,7 @@ const (
 	application    = protogen.GoImportPath("github.com/go-kirito/pkg/application")
 )
 
-func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.GeneratedFile {
+func generateFile(gen *protogen.Plugin, file *protogen.File, hasHttp bool) *protogen.GeneratedFile {
 	if len(file.Services) == 0 {
 		return nil
 	}
@@ -36,21 +36,21 @@ func generateFile(gen *protogen.Plugin, file *protogen.File) *protogen.Generated
 	g.P()
 	g.P("package ", file.GoPackageName)
 	g.P()
-	generateFileContent(gen, file, g)
+	generateFileContent(gen, file, g, hasHttp)
 	return g
 }
 
-func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile) {
+func generateFileContent(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, hasHttp bool) {
 	if len(file.Services) == 0 {
 		return
 	}
 
 	for _, service := range file.Services {
-		genService(gen, file, g, service)
+		genService(gen, file, g, service, hasHttp)
 	}
 }
 
-func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, service *protogen.Service) {
+func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFile, service *protogen.Service, hasHttp bool) {
 	// Server interface.
 	serverType := "I" + service.GoName + "UseCase"
 	g.P("// ", serverType, " is the server API for ", service.GoName, " service.")
@@ -73,10 +73,11 @@ func genService(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 	g.P()
 	g.P("// @di di文件根据注解自动生成")
 	g.P("func Register", service.GoName, "Server(app ", application.Ident("Application"), ", srv ", serverType, ") {")
-
-	g.P("if app.HttpServer() != nil {")
-	g.P("Register", service.GoName, "HTTPServer(app.HttpServer(), srv)")
-	g.P("}")
+	if hasHttp {
+		g.P("if app.HttpServer() != nil {")
+		g.P("Register", service.GoName, "HTTPServer(app.HttpServer(), srv)")
+		g.P("}")
+	}
 
 	g.P("if app.GrpcServer() != nil {")
 	g.P("Register", service.GoName, "GrpcServer(app.GrpcServer(), srv)")

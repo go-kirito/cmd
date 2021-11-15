@@ -36,9 +36,12 @@ func main() {
 			if !f.Generate {
 				continue
 			}
-			http.GenerateFile(gen, f, *omitempty)
+			hasHttp := true
+			if http.GenerateFile(gen, f, *omitempty) == nil {
+				hasHttp = false
+			}
 			grpc.GenerateFile(gen, f)
-			generateFile(gen, f)
+			generateFile(gen, f, hasHttp)
 		}
 		return nil
 	})
