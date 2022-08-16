@@ -98,6 +98,8 @@ func generate(proto string, args []string) error {
 			input = append(input, a)
 		}
 	}
+	fmt.Println("protoc ", input)
+
 	fd := exec.Command("protoc", input...)
 	fd.Stdout = os.Stdout
 	fd.Stderr = os.Stderr
