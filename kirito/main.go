@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	version string = "v1.0.0"
+	version string = "v0.0.9"
 
 	rootCmd = &cobra.Command{
 		Use:     "kirito",
