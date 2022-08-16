@@ -78,7 +78,7 @@ func walk(dir string, args []string) error {
 // generate is used to execute the generate command for the specified proto file
 func generate(proto string, args []string) error {
 	input := []string{
-		"--proto_path=/usr/local/include/google/protobuf",
+		"--proto_path=/usr/local/include",
 		"--proto_path=.",
 		"--proto_path=./third_party",
 		"--proto_path=" + base.KiritoMod(),
