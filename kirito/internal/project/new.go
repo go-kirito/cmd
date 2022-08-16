@@ -39,10 +39,6 @@ func (p *Project) New(ctx context.Context, dir string, layout string, branch str
 	if err := repo.CopyTo(ctx, to, p.Name, []string{".git", ".github"}); err != nil {
 		return err
 	}
-	os.Rename(
-		path.Join(to, "internal", "helloworld"),
-		path.Join(to, "internal", p.Name),
-	)
 
 	base.Tree(to, dir)
 
