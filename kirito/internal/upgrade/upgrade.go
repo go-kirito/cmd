@@ -23,6 +23,7 @@ func Run(cmd *cobra.Command, args []string) {
 		"github.com/go-kirito/cmd/protoc-gen-go-kirito@latest",
 		"google.golang.org/protobuf/cmd/protoc-gen-go@latest",
 		"github.com/envoyproxy/protoc-gen-validate@latest",
+		"github.com/google/wire/cmd/wire",
 	)
 	if err != nil {
 		fmt.Println(err)
