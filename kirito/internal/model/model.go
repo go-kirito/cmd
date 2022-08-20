@@ -68,7 +68,7 @@ func run(cmd *cobra.Command, args []string) {
 	o := parser.WithPackage("model")
 
 	for _, sql := range sqls {
-		codes, err := parser.ParseSql(sql, o)
+		codes, err := parser.ParseSql(sql, o, parser.WithGormType())
 		if err != nil {
 			log.Fatal(err)
 		}
