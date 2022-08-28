@@ -85,6 +85,13 @@ func generate(proto string, args []string) error {
 		"--proto_path=" + filepath.Join(base.KiritoMod(), "third_party"),
 		"--go_out=paths=source_relative:.",
 		"--go-kirito_out=paths=source_relative:.",
+		"--openapiv2_out=.",
+		"--openapiv2_opt=logtostderr=true",
+		"--openapiv2_opt=json_names_for_fields=false",
+		"--openapiv2_opt=disable_default_errors=true",
+		"--openapiv2_opt=allow_delete_body=true",
+		"--openapiv2_opt=enums_as_ints=true",
+		"--openapiv2_opt=openapi_naming_strategy=simple",
 	}
 	protoBytes, err := ioutil.ReadFile(proto)
 	if err == nil && len(protoBytes) > 0 {
