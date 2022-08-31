@@ -96,19 +96,29 @@ func makeCode(stmt *ast.CreateTableStmt, opt options) (tmplData, []string, error
 	}
 
 	isPrimaryKey := make(map[string]bool)
-	isIndex := make(map[string]string)
-	isUniq := make(map[string]string)
+	isIndex := make(map[string][]string)
+	isUniq := make(map[string][]string)
 	for _, con := range stmt.Constraints {
 		switch con.Tp {
 		case ast.ConstraintPrimaryKey:
 			isPrimaryKey[con.Keys[0].Column.String()] = true
 		case ast.ConstraintIndex:
 			for _, item := range con.Keys {
-				isIndex[item.Column.String()] = con.Name
+				index, ok := isIndex[item.Column.String()]
+				if !ok {
+					index = make([]string, 0)
+				}
+				index = append(index, con.Name)
+				isIndex[item.Column.String()] = index
 			}
 		case ast.ConstraintUniq:
 			for _, item := range con.Keys {
-				isUniq[item.Column.String()] = con.Name
+				index, ok := isUniq[item.Column.String()]
+				if !ok {
+					index = make([]string, 0)
+				}
+				index = append(index, con.Name)
+				isUniq[item.Column.String()] = index
 			}
 		default:
 			fmt.Println("未处理类型 con.tp:", con.Tp, "column:", con.Keys[0].Column, con.Name)
@@ -140,14 +150,18 @@ func makeCode(stmt *ast.CreateTableStmt, opt options) (tmplData, []string, error
 			gormTag.WriteString(";primary_key")
 		}
 
-		if indexName, ok := isIndex[colName]; ok {
-			gormTag.WriteString(";index:")
-			gormTag.WriteString(indexName)
+		if indexs, ok := isIndex[colName]; ok {
+			for _, indexName := range indexs {
+				gormTag.WriteString(";index:")
+				gormTag.WriteString(indexName)
+			}
 		}
 
 		if uniqName, ok := isUniq[colName]; ok {
-			gormTag.WriteString(";uniqueIndex:")
-			gormTag.WriteString(uniqName)
+			for _, indexName := range uniqName {
+				gormTag.WriteString(";uniqueIndex:")
+				gormTag.WriteString(indexName)
+			}
 		}
 
 		isNotNull := false
