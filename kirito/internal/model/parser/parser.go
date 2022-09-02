@@ -180,7 +180,11 @@ func makeCode(stmt *ast.CreateTableStmt, opt options) (tmplData, []string, error
 			case ast.ColumnOptionDefaultValue:
 				if value := getDefaultValue(o.Expr); value != "" {
 					gormTag.WriteString(";default:")
-					gormTag.WriteString(value)
+					if col.Tp.InfoSchemaStr() == "datetime" {
+						gormTag.WriteString("'" + value + "'")
+					} else {
+						gormTag.WriteString(value)
+					}
 				}
 			case ast.ColumnOptionUniqKey:
 				gormTag.WriteString(";unique")
