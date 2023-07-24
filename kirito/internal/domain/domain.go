@@ -42,12 +42,16 @@ func run(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if _, err := os.Stat(targetDir); os.IsNotExist(err) {
-		fmt.Printf("Target directory: %s does not exsits\n", targetDir)
-		return
-	}
-
 	wd, err := os.Getwd()
+
+	if _, err := os.Stat(targetDir); os.IsNotExist(err) {
+		dir := path.Join(wd, targetDir)
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+			fmt.Fprintf(os.Stderr, "Create directory error: %s\n", err.Error())
+			return
+		}
+
+	}
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Get pwd error: %s\n", err.Error())

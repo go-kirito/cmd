@@ -92,6 +92,7 @@ func generate(proto string, args []string) error {
 		"--openapiv2_opt=allow_delete_body=true",
 		"--openapiv2_opt=enums_as_ints=true",
 		"--openapiv2_opt=openapi_naming_strategy=simple",
+		"--openapiv2_opt=simple_operation_ids=true",
 	}
 	protoBytes, err := ioutil.ReadFile(proto)
 	if err == nil && len(protoBytes) > 0 {
