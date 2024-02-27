@@ -12,7 +12,7 @@ import (
 	"github.com/fatih/color"
 )
 
-// Project is a project template.
+// Project is a project tpl.
 type Project struct {
 	Name string
 }

@@ -12,8 +12,8 @@ import (
 // CmdAdd represents the add command.
 var CmdAdd = &cobra.Command{
 	Use:   "add",
-	Short: "Add a proto API template",
-	Long:  "Add a proto API template. Example: kirito add helloworld/v1/hello.proto",
+	Short: "Add a proto API tpl",
+	Long:  "Add a proto API tpl. Example: kirito add helloworld/v1/hello.proto",
 	Run:   run,
 }
 
@@ -35,7 +35,8 @@ func run(cmd *cobra.Command, args []string) {
 		Package:     pkgName,
 		GoPackage:   goPackage(path),
 		JavaPackage: javaPackage(pkgName),
-		Service:     serviceName(fileName),
+		Service:     camelString(serviceName(fileName)),
+		RouteName:   strings.ToLower(serviceName(fileName)),
 	}
 	if err := p.Generate(); err != nil {
 		fmt.Println(err)
@@ -64,6 +65,25 @@ func javaPackage(name string) string {
 
 func serviceName(name string) string {
 	return export(strings.Split(name, ".")[0])
+}
+
+func camelString(s string) string {
+	data := make([]byte, 0, len(s))
+	flag, num := true, len(s)-1
+	for i := 0; i <= num; i++ {
+		d := s[i]
+		if d == '_' {
+			flag = true
+			continue
+		} else if flag {
+			if d >= 'a' && d <= 'z' {
+				d = d - 32
+			}
+			flag = false
+		}
+		data = append(data, d)
+	}
+	return string(data)
 }
 
 func export(s string) string { return strings.ToUpper(s[:1]) + s[1:] }

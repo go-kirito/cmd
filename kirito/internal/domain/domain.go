@@ -42,6 +42,10 @@ func run(cmd *cobra.Command, args []string) {
 		return
 	}
 
+	GenerateDomainDirectory(targetDir)
+}
+
+func GenerateDomainDirectory(targetDir string) {
 	wd, err := os.Getwd()
 
 	if _, err := os.Stat(targetDir); os.IsNotExist(err) {

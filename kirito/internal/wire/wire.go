@@ -89,7 +89,7 @@ func run(cmd *cobra.Command, args []string) {
 	}
 }
 
-//遍历目录
+// 遍历目录
 func walk(dir string) error {
 	return filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if ext := filepath.Ext(path); ext != ".go" || strings.HasPrefix(path, "third_party") || strings.HasPrefix(path, "vendor") {
@@ -100,7 +100,7 @@ func walk(dir string) error {
 	})
 }
 
-//提取信息
+// 提取信息
 func extract(file string) error {
 	fSet := token.NewFileSet()
 
@@ -128,7 +128,7 @@ func extract(file string) error {
 					PackageName:  packageName,
 					Func:         funcName,
 					ParamType:    paramType,
-					VariableName: strings.ToLower(paramType),
+					VariableName: paramType,
 				}
 				//判断是否存在同名的package
 				v, ok := m[packageName]
@@ -164,7 +164,7 @@ func extract(file string) error {
 	return nil
 }
 
-//关键字匹配提取
+// 关键字匹配提取
 func isContainKeyword(desc string, keyword string) bool {
 	if keyword == "" {
 		return true

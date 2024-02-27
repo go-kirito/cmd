@@ -181,7 +181,12 @@ func makeCode(stmt *ast.CreateTableStmt, opt options) (tmplData, []string, error
 				if value := getDefaultValue(o.Expr); value != "" {
 					gormTag.WriteString(";default:")
 					if col.Tp.InfoSchemaStr() == "datetime" {
-						gormTag.WriteString("'" + value + "'")
+						if strings.ToUpper(value) == "CURRENT_TIMESTAMP" {
+							value = "current_timestamp"
+							gormTag.WriteString(value)
+						} else {
+							gormTag.WriteString("'" + value + "'")
+						}
 					} else {
 						gormTag.WriteString(value)
 					}
@@ -192,9 +197,12 @@ func makeCode(stmt *ast.CreateTableStmt, opt options) (tmplData, []string, error
 				//gormTag.WriteString(";NULL")
 				canNull = true
 			case ast.ColumnOptionOnUpdate: // For Timestamp and Datetime only.
+				gormTag.WriteString(" ON UPDATE CURRENT_TIMESTAMP")
 			case ast.ColumnOptionFulltext:
 			case ast.ColumnOptionComment:
 				field.Comment = o.Expr.GetDatum().GetString()
+				gormTag.WriteString(";comment:")
+				gormTag.WriteString(field.Comment)
 			default:
 				//return "", nil, errors.Errorf(" unsupport option %d\n", o.Tp)
 			}
@@ -277,7 +285,10 @@ func mysqlToGoType(colTp *types.FieldType, style NullStyle) (name string, path s
 			} else {
 				name = "int64"
 			}
-		case mysql.TypeFloat, mysql.TypeDouble, mysql.TypeDecimal, mysql.TypeNewDecimal:
+		case mysql.TypeDecimal, mysql.TypeNewDecimal:
+			name = "decimal.Decimal"
+			path = "github.com/shopspring/decimal"
+		case mysql.TypeFloat, mysql.TypeDouble:
 			name = "float64"
 		case mysql.TypeString, mysql.TypeVarchar, mysql.TypeVarString,
 			mysql.TypeBlob, mysql.TypeTinyBlob, mysql.TypeMediumBlob, mysql.TypeLongBlob:

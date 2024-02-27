@@ -53,6 +53,13 @@ func run(cmd *cobra.Command, args []string) {
 
 	defaultPath := wd + "/" + opt.TargetDir + "/model"
 
+	if _, err := os.Stat(defaultPath); os.IsNotExist(err) {
+		if err := os.MkdirAll(defaultPath, os.ModePerm); err != nil {
+			fmt.Fprintf(os.Stderr, "Create directory error: %s\n", err.Error())
+			return
+		}
+	}
+
 	log.Println("defaultPath:", defaultPath)
 
 	var tables []string

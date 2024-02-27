@@ -15,9 +15,10 @@ type Proto struct {
 	Package     string
 	GoPackage   string
 	JavaPackage string
+	RouteName   string
 }
 
-// Generate generate a proto template.
+// Generate generate a proto tpl.
 func (p *Proto) Generate() error {
 	body, err := p.execute()
 	if err != nil {

@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/go-kirito/cmd/kirito/internal/service"
+
 	"github.com/go-kirito/cmd/kirito/internal/change"
 	"github.com/go-kirito/cmd/kirito/internal/domain"
 	"github.com/go-kirito/cmd/kirito/internal/model"
@@ -16,7 +18,7 @@ import (
 )
 
 var (
-	version string = "v0.0.15"
+	version string = "v0.0.18"
 
 	rootCmd = &cobra.Command{
 		Use:     "kirito",
@@ -35,6 +37,7 @@ func init() {
 	rootCmd.AddCommand(wire.CmdWire)
 	rootCmd.AddCommand(domain.CmdDomain)
 	rootCmd.AddCommand(model.CmdModel)
+	rootCmd.AddCommand(service.CmdService)
 }
 
 func main() {

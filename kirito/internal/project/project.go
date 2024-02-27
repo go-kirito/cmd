@@ -13,8 +13,8 @@ import (
 // CmdNew represents the new command.
 var CmdNew = &cobra.Command{
 	Use:   "new",
-	Short: "Create a service template",
-	Long:  "Create a service project using the repository template. Example: kirito new helloworld",
+	Short: "Create a service tpl",
+	Long:  "Create a service project using the repository tpl. Example: kirito new helloworld",
 	Run:   run,
 }
 

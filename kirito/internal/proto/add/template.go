@@ -17,47 +17,80 @@ option java_multiple_files = true;
 option java_package = "{{.JavaPackage}}";
 
 service {{.Service}} {
-    rpc Create{{.Service}} (Create{{.Service}}Request) returns (Create{{.Service}}Reply){
+    rpc Create (Create{{.Service}}Request) returns (Create{{.Service}}Reply){
 		option(google.api.http) = {
-			post:"helloworld",
+			post:"/{{.RouteName}}s",
+			body:"*",
 		};
 	}
-    rpc Update{{.Service}} (Update{{.Service}}Request) returns (Update{{.Service}}Reply){
+    rpc Update (Update{{.Service}}Request) returns (Update{{.Service}}Reply){
 		option(google.api.http) = {
-			put:"helloworld/{name}",
+			put:"/{{.RouteName}}s/{id}",
+			body:"*",
 		};
 	}
-    rpc Delete{{.Service}} (Delete{{.Service}}Request) returns (Delete{{.Service}}Reply){
+    rpc Delete (Delete{{.Service}}Request) returns (Delete{{.Service}}Reply){
 		option(google.api.http) = {
-			delete:"helloworld/{name}",
+			delete:"/{{.RouteName}}s/{id}",
 		};
 	}
-    rpc Get{{.Service}} (Get{{.Service}}Request) returns (Get{{.Service}}Reply){
+    rpc Get (Get{{.Service}}Request) returns (Get{{.Service}}Reply){
 		option(google.api.http) = {
-			get:"helloworld/{name}",
+			get:"/{{.RouteName}}s/{id}",
 		};
 	}
-    rpc List{{.Service}} (List{{.Service}}Request) returns (List{{.Service}}Reply){
+    rpc List (List{{.Service}}Request) returns (List{{.Service}}Reply){
 		option(google.api.http) = {
-			get:"helloworld",
+			get:"/{{.RouteName}}s",
 		};
 	}
 }
 
-message Create{{.Service}}Request {}
-message Create{{.Service}}Reply {}
+message Create{{.Service}}Request {
+	string name = 1;
+}
 
-message Update{{.Service}}Request {}
-message Update{{.Service}}Reply {}
+message Create{{.Service}}Reply {
+	{{.Service}}Item item = 1;
+}
 
-message Delete{{.Service}}Request {}
-message Delete{{.Service}}Reply {}
+message Update{{.Service}}Request {
+	int64 id = 1;
+	string name = 2;
+	string status = 3;
+}
+message Update{{.Service}}Reply {
+	string result = 1;
+}
 
-message Get{{.Service}}Request {}
-message Get{{.Service}}Reply {}
+message Delete{{.Service}}Request {
+	int64 id = 1;
+}
+message Delete{{.Service}}Reply {
+	string result = 1;
+}
 
-message List{{.Service}}Request {}
-message List{{.Service}}Reply {}
+message Get{{.Service}}Request {
+	int64 id = 1;
+}
+message Get{{.Service}}Reply {
+	{{.Service}}Item item = 1;
+}
+
+message List{{.Service}}Request {
+	int32 offset = 1;
+	int32 limit = 2;
+}
+message List{{.Service}}Reply {
+	repeated {{.Service}}Item items = 1;
+	int32 total = 2;
+}
+
+message {{.Service}}Item {
+	int64 id = 1;
+	string name = 2;
+	string status = 3;
+}
 `
 
 func (p *Proto) execute() ([]byte, error) {
